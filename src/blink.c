@@ -2,6 +2,7 @@
 #include <device.h>
 #include <devicetree.h>
 #include <drivers/gpio.h>
+#include <toggleLED.h>
 
 #define LED0_NODE DT_ALIAS(led0)
 #define LED1_NODE DT_ALIAS(led1)
@@ -28,7 +29,7 @@
 
 struct k_thread coop_thread;
 K_THREAD_STACK_DEFINE(coop_stack, STACKSIZE);
-int counter;
+
 bool led_is_on;
 
 void thread_entry(void)
@@ -42,9 +43,7 @@ void thread_entry(void)
 	k_timer_init(&t, NULL, NULL);
 
 	while (1) {
-        counter = counter + 1;
-        led_is_on = !led_is_on;
-		gpio_pin_set(dev, PIN1, (int)led_is_on);
+		ToggleLED(dev, &led_is_on, PIN1);
 		k_timer_start(&t, K_MSEC(2000), K_NO_WAIT);
 		k_timer_status_sync(&t);
 	}
@@ -79,8 +78,7 @@ void main(void)
 	}
 
 	while (1) {
-		led_is_on = !led_is_on;
-		gpio_pin_set(dev, PIN0, (int)led_is_on);
+		ToggleLED(dev, &led_is_on, PIN0);
 		k_msleep(500);
 	}
 }
