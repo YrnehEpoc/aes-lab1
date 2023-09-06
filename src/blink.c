@@ -33,20 +33,18 @@ bool led_is_on;
 
 void thread_entry(void)
 {
-	//S
     const struct device *dev;
     dev = device_get_binding(LED1);
     bool led_is_on = true;
-	int ret = gpio_pin_configure(dev, PIN1, GPIO_OUTPUT_ACTIVE | FLAGS0);
+	int ret = gpio_pin_configure(dev, PIN0, GPIO_OUTPUT_ACTIVE | FLAGS0);
 
 	struct k_timer t;
 	k_timer_init(&t, NULL, NULL);
 
-	while (1) { 
-		//Flash Pin 1 (Orange LED) every 2 seconds
-        counter = counter + 1; //Seems useless
+	while (1) {
+        counter = counter + 1;
+        led_is_on = !led_is_on;
 		gpio_pin_set(dev, PIN1, (int)led_is_on);
-		led_is_on = !led_is_on;
 		k_timer_start(&t, K_MSEC(2000), K_NO_WAIT);
 		k_timer_status_sync(&t);
 	}
@@ -81,9 +79,8 @@ void main(void)
 	}
 
 	while (1) {
-		// Flash Pin 0 (Red LED) on/off every 0.5 seconds
-		gpio_pin_set(dev, PIN0, (int)led_is_on);
 		led_is_on = !led_is_on;
+		gpio_pin_set(dev, PIN0, (int)led_is_on);
 		k_msleep(500);
 	}
 }
