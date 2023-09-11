@@ -6,10 +6,8 @@ int ToggleLED(const struct device *devbrd, bool *ledstatus,gpio_pin_t pinNum ){
     return 0;
 }
 
-int ConfigureLED(){
-    const struct device *dev;
-    dev = device_get_binding(LED1);
-    bool led_is_on = true;
-	int ret = gpio_pin_configure(dev, PIN1, GPIO_OUTPUT_ACTIVE | FLAGS0);
+int ConfigureLED(struct device *dev, gpio_pin_t pinNum, gpio_flags_t flags){
+	int ret = gpio_pin_configure(dev, pinNum, GPIO_OUTPUT_ACTIVE | flags);
+    return 0;
 
 }
