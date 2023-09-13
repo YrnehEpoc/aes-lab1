@@ -1,18 +1,39 @@
 #include <stdint.h>
+#include <stdio.h>
 #include <unity.h>
+#include <zephyr.h>
+#include <device.h>
+#include <devicetree.h>
+#include <drivers/gpio.h>
+#include "toggleLED.h"
+
+#define LED_NODE DT_ALIAS(led2)
+#define LED	DT_GPIO_LABEL(LED_NODE, gpios)
+#define PIN	DT_GPIO_PIN(LED_NODE, gpios)
+#define FLAGS	DT_GPIO_FLAGS(LED_NODE, gpios)
 
 void setUp(void) {}
 
 void tearDown(void) {}
 
-void testWorks()
+void test_led(void)
 {
-    TEST_ASSERT_TRUE_MESSAGE(1 == 1,"Data bits not set as expected");
+	const struct device *dev = device_get_binding(LED);
+    
+	int led_is_on = ConfigureLED(dev,PIN,FLAGS);
+    TEST_ASSERT_TRUE_MESSAGE(!led_is_on, "LED flag should start toggled off");
+    
+    led_is_on = ToggleLED(dev, led_is_on, PIN);
+    TEST_ASSERT_TRUE_MESSAGE(led_is_on, "LED flag should be on");
+    TEST_ASSERT_TRUE_MESSAGE(gpio_pin_get(dev,PIN),"GPIO should be on");
+
+
 }
+
 
 int main (void)
 {
     UNITY_BEGIN();
-    RUN_TEST(testWorks);
+    RUN_TEST(test_led);
     return UNITY_END();
 }
