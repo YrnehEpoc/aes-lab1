@@ -1,4 +1,5 @@
-Lab 1 for Advanced Embedded Systems
+#Lab 1 for Advanced Embedded Systems
 
-  in this lab we setup github and familiarized ourselves with git commands
-![example workflow](https://github.com/YrnehEpoc/Adv-embsys/actions/workflows/main.yml/badge.svg)
+In this lab we investigated project organization and unity testing
+
+![example workflow](https://github.com/YrnehEpoc/aes-lab1/actions/workflows/main.yml/badge.svg)
